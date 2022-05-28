@@ -1,23 +1,28 @@
-import logo from './logo.svg';
+import { useSelector } from 'react-redux';
 import './App.css';
+import CreateNewItem from './components/CreateNewItem/CreateNewItem';
+import Status from './components/status/status';
+import TodoItem from './components/TodoItem/TodoItem';
 
 function App() {
+  const [items, category] = useSelector(state => [state.items, state.category])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1 className='title'>todos</h1>
+      <div className='itemsBody'>
+        <div className='itemsList'>
+          <CreateNewItem/>
+          {items.map((item) => 
+          category === 'All' ? 
+            <TodoItem item={item} key={item.id}/>
+          : category === "Active" && !item.checked ?
+            <TodoItem item={item} key={item.id}/> :
+            category === "Completed" && item.checked ? 
+            <TodoItem item={item} key={item.id}/> : ""
+            )}
+          {items.length > 0 ? <Status/> : ""}
+        </div>
+      </div>
     </div>
   );
 }
